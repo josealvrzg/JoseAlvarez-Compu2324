@@ -5,10 +5,10 @@ i = complex(0,1)                    ## Unidad imaginaria
 
 ## PARAMTEROS
 
-N = 10                            # Numero divisiones en el reticulo espacial
+N = 1000                            # Numero divisiones en el reticulo espacial
 nciclos = 185
 lamb = 0.6                          # Altura potencial
-T = 5                            # Iteraciones temporales
+T = 5000                            # Iteraciones temporales
 h = 1                               # Precision espacial
 
 ##################
