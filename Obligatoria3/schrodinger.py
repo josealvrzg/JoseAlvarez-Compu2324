@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from numba import njit
 
 i = complex(0,1)                    ## Unidad imaginaria
@@ -20,7 +21,8 @@ alpha = np.zeros(N-1,dtype=complex) # alpha
 beta = np.zeros(N-1,dtype=complex)  # beta
 gamma = np.zeros(N-1,dtype=complex) # gamma
 ji = np.zeros(N,dtype=complex)      # ji
-Vprim = np.zeros(N,dtype=complex)   # Potencial
+Vprim = np.zeros(N)                 # Potencial
+Norm = np.array(range(0,T))         # Norma de la funcion de onda
 
 ##################
 
@@ -47,6 +49,7 @@ for k in range(N-2,0,-1):                               #range(inicio, final, pa
 for k in range(N-1,0,-1):
     gamma[k-1] = 1/(A0[k-1]+alpha[k-1])
 
+
 ##################
 
 ## FUNCIONES
@@ -66,10 +69,11 @@ def calculos(phi,beta,ji):
 
     return phi                                          # Devuelve el nuevo valor de phi 
 
+
 ## Escribir en el fichero
 def escribir():
     Prob = abs(phi)**2                                  # Probabilidad (modulo cuadrado)
-    datos = np.column_stack((x, Prob))                  # Agrupa los vectores en columnas de una matriz
+    datos = np.column_stack((x, Prob, Vprim))           # Agrupa los vectores en columnas de una matriz
 
     # Guardar cada fila de la matriz en el archivo
     for fila in datos:
@@ -87,7 +91,8 @@ with open("schrodinger_data.dat", "w") as f:            # Abre el archivo de esc
     n=0
     ## Instantes posteriores
     while n<T:
-
+        
+        Norm[n] = sum(abs(phi)**2)                      # Calculo la norma de phi^2
         phi = calculos(phi,beta,ji)                     # Actualiza el vector phi
         escribir()                                      # Escribe en el fichero cada instante n
 
@@ -95,3 +100,10 @@ with open("schrodinger_data.dat", "w") as f:            # Abre el archivo de esc
 f.close()                                               # Cierra el fichero
 
 ##################
+
+# Grafica conservacion de la norma
+plt.plot(Norm)
+plt.xlabel('Iteración')
+plt.ylabel(r'Suma del Módulo cuadrado de $\phi$')
+plt.title('Conservación de la Norma')
+plt.show()
