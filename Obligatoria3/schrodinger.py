@@ -7,10 +7,12 @@ i = complex(0,1)                    ## Unidad imaginaria
 ## PARAMTEROS
 
 N = 1000                            # Numero divisiones en el reticulo espacial
-nciclos = 185
-lamb = 0.6                          # Altura potencial
+nciclos = 180                       # Numero oscilaciones completas
+lamb = 0.7                         # Altura potencial
 T = 5000                            # Iteraciones temporales
 h = 1                               # Precision espacial
+x0 = N*h/4                          # Posicion inicial de la onda (media)
+sigma = N*h/16                      # Desviacion del paquete gaussiano
 
 ##################
 
@@ -38,7 +40,7 @@ for k in range(N):
         Vprim[k] = lamb*k0prim**2
 
 ## Funcion de onda inicial
-phi = np.array(np.exp(i*k0prim*j)*np.exp(-8*(4*j-N)**2/N**2),
+phi = np.array(np.exp(i*k0prim*j)*np.exp(-(j*h-x0)**2/(2*sigma**2)),
                dtype=complex)
 phi[0]=phi[N-1]=0                                       # Condiciones de contorno
 

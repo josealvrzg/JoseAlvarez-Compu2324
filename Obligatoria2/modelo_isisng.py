@@ -4,9 +4,9 @@ from numba import njit
 
 ## PARAMETROS
 
-N = 100                 # Dimension de la red
-T = 0.1                 # Temperatura
-Pasos = 1000           # Numero de pasos montecarlo
+N = 200                 # Dimension de la red
+T = 1.0                 # Temperatura
+Pasos = 1000            # Numero de pasos montecarlo
 
 ##################
 

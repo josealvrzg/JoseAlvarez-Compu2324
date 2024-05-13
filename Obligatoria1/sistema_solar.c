@@ -9,7 +9,7 @@
 
 int main() {
 
-    int GEO=1;  // 0 si queremos modelo Heliocentrico
+    int GEO=0;  // 0 si queremos modelo Heliocentrico
                 // 1 si queremos modelo Geocentrico 
 
     int N=1000000; //iteracionnes
