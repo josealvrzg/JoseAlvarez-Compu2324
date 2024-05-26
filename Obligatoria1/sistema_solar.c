@@ -16,7 +16,7 @@ int main() {
     double dt=0.01;  //precision temporal
 
     int i, j; //contador
-
+    
     double t=0; //tiempo
     
     double masas[PLANETAS]; //masas

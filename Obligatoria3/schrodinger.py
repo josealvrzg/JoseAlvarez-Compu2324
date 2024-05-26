@@ -8,7 +8,7 @@ i = complex(0,1)                    ## Unidad imaginaria
 
 N = 1000                            # Numero divisiones en el reticulo espacial
 nciclos = 180                       # Numero oscilaciones completas
-lamb = 0.7                         # Altura potencial
+lamb = 0.5                         # Altura potencial
 T = 5000                            # Iteraciones temporales
 h = 1                               # Precision espacial
 x0 = N*h/4                          # Posicion inicial de la onda (media)
