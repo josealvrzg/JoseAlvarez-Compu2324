@@ -1,9 +1,12 @@
 import numpy as np
 from numba import njit, jit
+import time
 
+
+start_time = time.time()
 ## PARAMETROS
 
-N = 200                 # Dimension de la red
+N = 25                 # Dimension de la red
 T = 1.0                 # Temperatura
 Pasos = 1000            # Numero de pasos montecarlo
 
@@ -81,3 +84,8 @@ with open("ising_data.dat", "w") as f:
 f.close()
 
 ##################
+
+end_time = time.time()
+execution_time = end_time - start_time
+
+print(f"El tiempo de ejecución fue de {execution_time} segundos")
