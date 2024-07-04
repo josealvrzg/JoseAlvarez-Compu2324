@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 ## PARAMETROS
 
-N = 60                 # Dimension de la red
-T = 0.1                 # Temperatura
+N = 64                 # Dimension de la red
+T = 5                 # Temperatura
 Pasos = 1000            # Numero de pasos montecarlo
 
 ##################
@@ -14,7 +14,10 @@ Pasos = 1000            # Numero de pasos montecarlo
 
 s = np.zeros((N,N))     # Red de spines
 snew = np.zeros((N,N))  # Red de spines actualizada
-M = np.array([])        # Vector de magnetizacion
+M  = np.array([]) 
+Mup = np.array([])      # Vector de magnetizacion arriba
+Mdown = np.array([])    # Vector de magnetizacion abajo
+
 
 ##################
 
@@ -23,16 +26,18 @@ M = np.array([])        # Vector de magnetizacion
 ## Valor inicial aleatorio
 for i in range(N):
   for j in range(N):
-    spin=int(np.random.choice([-1,1]))       #spin up o down
+    spin=int(np.random.choice([-1, 1]))       #spin up o down
     s[i][j] = spin
-s[0, :] = 1  # Primera fila fija con +1
-s[N-1, :] = -1  # Última fila fija con -1
+s[0, :] = -1  # Primera fila fija con +1
+s[N-1, :] = 1  # Última fila fija con -1
 
 snew[:] = s  # Copiar la configuración actual
 
 ##################
 
 ## FUNCIONES
+
+## Energia
 @njit
 def calculo_energia(red):
   E=0
@@ -63,7 +68,7 @@ def ising(s, snew, N, T):
             (n, (m + 1) % N)       # Derecha
         ]
           
-    elif n==N-1:                              # No cuenta el vecino de abajo
+    elif n==N-2:                              # No cuenta el vecino de abajo
         vecinos = [
             ((n - 1), m),          # Arriba
             (n, (m - 1) % N),      # Izquierda
@@ -97,11 +102,9 @@ def ising(s, snew, N, T):
 
 ## Magnetizacion
 
-def magnetizacion(s,N):
+def magnetizacion(s):
     M = 0
-    for i in range(N):
-        for j in range(N):
-           M += s[i, j]
+    M = np.sum(s)
     return M
 
 ## Escribir en fichero
@@ -125,10 +128,16 @@ with open("ising_data.dat", "w") as f:
 
     ising(s, snew, N, T)                                  # Actualiza la matriz de spines (Pasos de Ising)
     escribir()                                # Escribe en el fichero cada instante t
-    M = np.append(M,magnetizacion(s,N))
+    M = np.append(M,magnetizacion(s))
+    Mup = np.append(Mup,magnetizacion(s[:N//2]))
+    Mdown = np.append(Mdown,magnetizacion(s[N//2:]))
     t+=1
 f.close()
 
 ##################
-plt.plot(M)
+plt.plot(M, label = "Magnetización Total")
+plt.plot(Mup, label = "Magnetización Arriba")
+plt.plot(Mdown, label = "Magnetización Abajo")
+plt.legend()
 plt.show()
+
