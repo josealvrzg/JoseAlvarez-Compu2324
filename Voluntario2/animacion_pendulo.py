@@ -1,5 +1,5 @@
 # ================================================================================
-# ANIMACION SISTEMA SOLAR
+# ANIMACION PENDULO
 #
 # Genera una animación a partir de un fichero de datos con las posiciones
 # de los planetas en diferentes instantes de tiempo.
@@ -16,13 +16,13 @@
 #   x2_2, y2_2
 #   x3_2, y3_2
 #   (...)
-#   xN_2, yN_2
+#   xN_2, y2_2
 #
 #   x1_3, y1_3
 #   x2_3, y2_3
 #   x3_3, y3_3
 #   (...)
-#   xN_3, yN_3
+#   xN_3, y3_3
 #   
 #   (...)
 #
@@ -48,7 +48,7 @@ import numpy as np
 # Parámetros
 # ========================================
 file_in = "posiciones_pendulo.dat" # Nombre del fichero de datos
-file_out = "cohete" # Nombre del fichero de salida (sin extensión)
+file_out = "pendulo_animacion" # Nombre del fichero de salida (sin extensión)
 
 # Límites de los ejes X e Y
 x_min = -2.0
@@ -87,7 +87,7 @@ for frame_data_str in data_str.split("\n\n"):
     frame_data = list()
 
     # Itera sobre las líneas del bloque
-    # (cada línea da la posición de un planta)
+    # (cada línea da la posición de un planeta)
     for planet_pos_str in frame_data_str.split("\n"):
         # Lee la componente x e y de la línea
         planet_pos = np.fromstring(planet_pos_str, sep=",")
@@ -127,13 +127,12 @@ else:
                 "de planetas")
 
 # Representa el primer fotograma
-# Pinta un punto en la posición de cada paneta y guarda el objeto asociado
+# Pinta un punto en la posición de cada planeta y guarda el objeto asociado
 # al punto en una lista
 planet_points = list()
 planet_trails = list()
 for planet_pos, radius in zip(frames_data[0], planet_radius):
     x, y = planet_pos
-    #planet_point, = ax.plot(x, y, "o", markersize=10)
     planet_point = Circle((x, y), radius)
     ax.add_artist(planet_point)
     planet_points.append(planet_point)
@@ -144,8 +143,12 @@ for planet_pos, radius in zip(frames_data[0], planet_radius):
                 x, y, "-", linewidth=trail_width,
                 color=planet_points[-1].get_facecolor())
         planet_trails.append(planet_trail)
- 
-# Función que actualiza la posición de los planetas en la animación 
+
+# Inicializa las líneas
+line_origin_to_first, = ax.plot([], [], 'k-')
+line_first_to_second, = ax.plot([], [], 'k-')
+
+# Función que actualiza la posición de los planetas y las líneas en la animación 
 def update(j_frame, frames_data, planet_points, planet_trails, show_trail):
     # Actualiza la posición del correspondiente a cada planeta
     for j_planet, planet_pos in enumerate(frames_data[j_frame]):
@@ -159,7 +162,14 @@ def update(j_frame, frames_data, planet_points, planet_trails, show_trail):
 
             planet_trails[j_planet].set_data(xs_new, ys_new)
 
-    return planet_points + planet_trails
+    # Actualiza las líneas
+    line_origin_to_first.set_data([0, frames_data[j_frame][0][0]], [0, frames_data[j_frame][0][1]])
+    line_first_to_second.set_data(
+        [frames_data[j_frame][0][0], frames_data[j_frame][1][0]], 
+        [frames_data[j_frame][0][1], frames_data[j_frame][1][1]]
+    )
+
+    return planet_points + planet_trails + [line_origin_to_first, line_first_to_second]
 
 def init_anim():
     # Clear trails
@@ -167,12 +177,14 @@ def init_anim():
         for j_planet in range(nplanets):
             planet_trails[j_planet].set_data(list(), list())
 
-    return planet_points + planet_trails
+    # Inicializa las líneas
+    line_origin_to_first.set_data([], [])
+    line_first_to_second.set_data([], [])
+
+    return planet_points + planet_trails + [line_origin_to_first, line_first_to_second]
 
 # Calcula el nº de frames
 nframes = len(frames_data)
-
-
 
 # Si hay más de un instante de tiempo, genera la animación
 if nframes > 1:
