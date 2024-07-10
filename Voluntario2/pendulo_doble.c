@@ -15,17 +15,17 @@ double y2dot(double y1, double y2, double y3, double y4){
 }
 
 double y3dot(double y1, double y2, double y3, double y4){  
-    double numerator = g * sin(y2) * cos(y1-y2) - 2 * g * sin(y1) - y3 * y3 * cos(y1-y2) * sin(y1-y2) - y4 * y4 * sin(y1-y2);
-    double denominator = 2 - cos(y1-y2) * cos(y1-y2);
+    double numerador = g * sin(y2) * cos(y1-y2) - 2 * g * sin(y1) - y3 * y3 * cos(y1-y2) * sin(y1-y2) - y4 * y4 * sin(y1-y2);
+    double denominador = 2 - cos(y1-y2) * cos(y1-y2);
     
-    return numerator / denominator; 
+    return numerador / denominador; 
 }
 
 double y4dot(double y1, double y2, double y3, double y4){
-    double numerator = g * sin(y1) * cos(y1-y2) - g * sin(y2) + 0.5 * y4 * y4 * cos(y1-y2) * sin(y1-y2) + y3 * y3 * sin(y1-y2);
-    double denominator = 1 - 0.5 * cos(y1-y2) * cos(y1-y2);
+    double numerador = g * sin(y1) * cos(y1-y2) - g * sin(y2) + 0.5 * y4 * y4 * cos(y1-y2) * sin(y1-y2) + y3 * y3 * sin(y1-y2);
+    double denominador = 1 - 0.5 * cos(y1-y2) * cos(y1-y2);
 
-    return numerator / denominator;
+    return numerador / denominador;
 }
 
 
@@ -37,33 +37,48 @@ int main(){
         fprintf(stderr, "No se pudo abrir el archivo1.\n");
         return 1;
     }
-    FILE *f2 = fopen("hamiltoniano.dat", "w");
+
+        FILE *f2 = fopen("mapa_poincare_phi.dat", "w");
         if (f2 == NULL) {                                          ///comprobar que el archivo se ha abierto
-        fprintf(stderr, "No se pudo abrir el archivo1.\n");
+        fprintf(stderr, "No se pudo abrir el archivo2.\n");
+        return 1;
+    }
+
+        FILE *f3 = fopen("mapa_poincare_psi.dat", "w");
+        if (f3 == NULL) {                                          ///comprobar que el archivo se ha abierto
+        fprintf(stderr, "No se pudo abrir el archivo3.\n");
         return 1;
     }
 
     //// PARAMETROS
 
-    double phi0 = 1.0;                  // Angulo 1 inicial
-    double psi0 = 0.0;                  // Angulo 2 inicial
-    double phidot0 = 0.0;               // Velocidad Angular 1 inicial    
+    double phi0 = 45.0*PI/180.0;        // Angulo 1 inicial
+    double psi0 = 45.0*PI/180.0;        // Angulo 2 inicial 
     double psidot0 = 0.0;               // Velocidad Angular 2 inicial
-    double T = 300.0;                   // Tiempo total transcurrido
+    double E = 1.0;                     // Energia del sistema
+    double d = +1.0;                    // Direccion de la velocidad inicial de la masa 1 (+1 antihorario, -1 horario)
+    double T = 100.0;                    // Tiempo total transcurrido
     double h = 0.01;                    // Paso temporal
 
     //// VARIABLES
 
     double Y[4];                        // Y[phi,psi,phidot,psidot] vector de coordenadas y velocidades asociadas
     double k1[4], k2[4], k3[4], k4[4];  // Vectores para la evolucion temporal 
-    double t = 0.0;                       // Tiempo
+    double t = 0.0;                     // Tiempo
     int i,j;                            // Contadores
     double x1,y1,x2,y2;                 // Posiciones X e Y en un instante t de las dos masas
-    double hamiltoniano;
 
     //// CALCULOS INICIALES
 
+    // Velocidad Angular 1 inicial
+    double discriminante = psidot0*psidot0*cos(phi0-psi0)*cos(phi0-psi0) -4*(0.5*psidot0*psidot0 - 2*g*cos(phi0) - g*cos(psi0) - E);
 
+    if (discriminante < 0) {
+        printf("Error: La expresión bajo la raíz cuadrada es negativa.\n"); 
+        return 1;
+    }
+    double phidot0 = 0.5 * (-psidot0*cos(phi0-psi0) + d*sqrt(discriminante));
+                                                        
     //// INSTANTE INICIAL
 
     Y[0] = phi0;                           // Angulo 1 inicial
@@ -112,10 +127,22 @@ int main(){
 
 
 
-        ////escribir en el archivo de salida
+        // Escribir en los archivos de salida
         fprintf(f1,"%lf,\t%lf\n%lf,\t%lf\n",x1,y1,x2,y2);
         fprintf(f1,"\n");
-        fprintf(f2,"%lf\n",hamiltoniano);
+
+        fprintf(f2,"%lf,\t%lf\n",Y[0],Y[2]);
+
+        fprintf(f3,"%lf,\t%lf\n",Y[1],Y[3]);
     }
+
+fprintf(f2,"\n");
+fprintf(f3,"\n");
+
+// Cerrar archivos de escritura
+fclose(f1);
+fclose(f2);
+fclose(f3);
+
 return 0;
 }
