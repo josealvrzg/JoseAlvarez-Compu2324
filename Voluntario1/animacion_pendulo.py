@@ -38,16 +38,16 @@ import numpy as np
 
 # Parámetros
 # ========================================
-file_in = "posiciones_pendulo1.dat" # Nombre del fichero de datos
+file_in = "posiciones_pendulo.dat" # Nombre del fichero de datos
 file_out = "pendulo_animacion" # Nombre del fichero de salida (sin extensión)
 
 # Límites de los ejes X e Y
 x_min = -2.5
 x_max = 2.5
-y_min = -2.5
-y_max = 2.5
+y_min = -3.5
+y_max = 0.2
 
-interval = 10 # Tiempo entre fotogramas en milisegundos
+interval = 1 # Tiempo entre fotogramas en milisegundos
 show_trail = True # Muestra la "estela" de la mas
 trail_width = 1 # Ancho de la estela
 save_to_file = False # False: muestra la animación por pantalla,

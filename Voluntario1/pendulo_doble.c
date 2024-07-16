@@ -40,31 +40,31 @@ int main(){
     time(&start);
 
     // Abrir archivos de escritura
-    FILE *f1 = fopen("posiciones_pendulo1.dat", "w");
+    FILE *f1 = fopen("posiciones_pendulo.dat", "w");
         if (f1 == NULL) {                                          // Comprobar que el archivo se ha abierto
         fprintf(stderr, "No se pudo abrir el archivo1.\n");
         return 1;
     }
 
-        FILE *f2 = fopen("mapa_poincare_angulos1.dat", "w");
+        FILE *f2 = fopen("mapa_poincare_angulos.dat", "w");
         if (f2 == NULL) {                                          // Comprobar que el archivo se ha abierto
         fprintf(stderr, "No se pudo abrir el archivo2.\n");
         return 1;
     }
 
-        FILE *f3 = fopen("mapa_poincare_phi1.dat", "w");
+        FILE *f3 = fopen("mapa_poincare_phi.dat", "w");
         if (f3 == NULL) {                                          // Comprobar que el archivo se ha abierto
         fprintf(stderr, "No se pudo abrir el archivo3.\n");
         return 1;
     }
 
-        FILE *f4 = fopen("mapa_poincare_psi1.dat", "w");
+        FILE *f4 = fopen("mapa_poincare_psi.dat", "w");
         if (f4 == NULL) {                                          // Comprobar que el archivo se ha abierto
         fprintf(stderr, "No se pudo abrir el archivo4.\n");
         return 1;
     }
 
-        FILE *f5 = fopen("espacio_fasico1_prime.dat", "w");
+        FILE *f5 = fopen("espacio_fasico.dat", "w");
         if (f5 == NULL) {                                          // Comprobar que el archivo se ha abierto
         fprintf(stderr, "No se pudo abrir el archivo5.\n");
         return 1;
@@ -72,12 +72,12 @@ int main(){
 
     //// PARAMETROS
 
-    double phi0 = 50.0*PI/180.0;        // Angulo 1 inicial
-    double psi0 = 50.0*PI/180.0;        // Angulo 2 inicial 
+    double phi0 = 4.0*PI/180.0;        // Angulo 1 inicial
+    double psi0 = 4.0*PI/180.0;        // Angulo 2 inicial 
     double psidot0 = 0.1;               // Velocidad Angular 2 inicial
-    double E = 1.0*g;                     // Energia del sistema
+    double E = 1.0*g;                   // Energia del sistema
     double d = 1.0;                     // Direccion de la velocidad inicial de la masa 1 (+1 antihorario, -1 horario)
-    double T = 100000.0;                  // Tiempo total transcurrido
+    double T = 200.0;                // Tiempo total transcurrido
     double h = 0.01;                    // Paso temporal
 
     //// VARIABLES
@@ -98,7 +98,7 @@ int main(){
         return 1;
     }
     double phidot0 = 0.5 * (-psidot0*cos(phi0-psi0) + d*sqrt(discriminante));
-                                 
+        phidot0 = 0.1;                     
     //// INSTANTE INICIAL
 
     Y[0] = phi0;                           // Angulo 1 inicial

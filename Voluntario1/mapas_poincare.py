@@ -42,5 +42,5 @@ plt.ylabel(r'$\psi \, (\mathrm{rad})$', fontsize=14)
 plt.legend()
 
 # Mostrar la gráfica
-plt.grid(True)
+plt.grid()
 plt.show()
