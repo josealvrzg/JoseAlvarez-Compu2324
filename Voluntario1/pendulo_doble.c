@@ -98,7 +98,7 @@ int main(){
         return 1;
     }
     double phidot0 = 0.5 * (-psidot0*cos(phi0-psi0) + d*sqrt(discriminante));
-        phidot0 = 0.1;                     
+                  
     //// INSTANTE INICIAL
 
     Y[0] = phi0;                           // Angulo 1 inicial
